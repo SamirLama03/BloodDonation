@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from .models import BloodRequest, Hospital, BloodRequestComment
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class BloodRequestCommentSerializer(serializers.ModelSerializer):
@@ -12,8 +15,6 @@ class BloodRequestCommentSerializer(serializers.ModelSerializer):
             'text',
             'created_at'
         ]
-
-    
 
 
 class HospitalSerializer(serializers.ModelSerializer):
@@ -59,4 +60,10 @@ class BloodRequestSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data['requester'] = self.context['request'].user
-        return super().create(validated_data)
+        instance = super().create(validated_data)
+        list_of_users_to_notify = (User.objects.filter(
+            location=instance.location,
+            blood_type=instance.blood_type_needed
+        ).values_list("email",flat=True))
+        # Yeta bata notify garine user list of users lai 
+        return instance
