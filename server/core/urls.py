@@ -8,8 +8,8 @@ from .views import (
 
 router = DefaultRouter()
 router.register('hospital', BloodRequestViewSet, basename='hospital')
-router.register('location-autocomplete', BloodRequestViewSet, basename='location-autocomplete')
-router.register('emergency-requests', BloodRequestViewSet, basename='emergency-request')
+router.register('location-autocomplete', LocationAutoCompleteViewSet, basename='location-autocomplete')
+router.register('emergency-requests', HospitalViewSet, basename='emergency-request')
 
 urlpatterns = [
     path('', include(router.urls)),
