@@ -56,7 +56,8 @@ class BloodRequest(models.Model):
 
     def __str__(self):
         return f"{self.hospital.name} needs {self.units_needed} units of {self.blood_type_needed}"
-    
+
+
 class BloodRequestComment(models.Model):
     request = models.ForeignKey(
         BloodRequest,

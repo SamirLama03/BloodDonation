@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import BloodRequest, Hospital, BloodRequestComment
+from authentication.models import Location
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -67,3 +68,16 @@ class BloodRequestSerializer(serializers.ModelSerializer):
         ).values_list("email",flat=True))
         # Yeta bata notify garine user list of users lai 
         return instance
+    
+class LocationAutoCompleteSerializer(serializer.ModelSerializer):
+    district = serializers.ReadOnlyField(source="district.name")
+    province = serializers.ReadOnlyField(source="district.province.name")
+
+    class Meta:
+        model = Location
+        fields = [
+            'id', 
+            'name',
+            'district',
+            'province'
+        ]
