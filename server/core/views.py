@@ -1,12 +1,13 @@
 from rest_framework.viewsets import ModelViewSet
 from django.core.cache import cache
 from .serializers import LocationAutoCompleteSerializer
-from rest_framework import permissions
-from .models import BloodRequest,BloodRequestComment, Hospital
-from .serializers import BloodRequestSerializer, BloodRequestCommentSerializer,HospitalSerializer
+from rest_framework import permissions, status
+from .models import BloodRequest,BloodRequestComment, Hospital, BloodDonationEvent
+from .serializers import BloodRequestSerializer, BloodRequestCommentSerializer,HospitalSerializer, BloodDonationEventSerializer
 from rest_framework.decorater import action
 from rest_framework.response import Response
 from authentication.models import Location
+from rest_framework.serializer import Serializer
 
 
 class BloodRequestViewSet(ModelViewSet):
@@ -65,5 +66,33 @@ class LocationAutoCompleteViewSet(ModelViewSet):
 
 
 
+class BloodDonationEventViewSet(viewsets.ModelViewSet):
+    queryset = BloodDonationEvent.objects.all().order_by('-start_datetime')
+    serializer_class = BloodDonationEventSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    @action(detail=True, methods=['post'], permissions=[permissions.IsAuthenticated], serializer_class=Serializer)
+    def join(self, request, pk=None):
+        """
+        Join the event.
+        """
+        event = self.get_object()
+        user = request.user
+        if user in event.participants.all():
+            return Response({"detail": "You have already joined this event."}, status=status.HTTP_400_BAD_REQUEST)
+        event.participants.add(user)
+        return Response({"detail": "Successfully joined the event."})
+
+    @action(detail=True, methods=['post'],permissions=[permissions.IsAuthenticated], serializer_class=Serializer)
+    def leave(self, request, pk=None):
+        """
+        Leave the event.
+        """
+        event = self.get_object()
+        user = request.user
+        if user not in event.participants.all():
+            return Response({"detail": "You are not a participant of this event."}, status=status.HTTP_400_BAD_REQUEST)
+        event.participants.remove(user)
+        return Response({"detail": "Successfully left the event."}, status=status.HTTP_200_OK)
 
     

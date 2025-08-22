@@ -74,3 +74,31 @@ class BloodRequestComment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.user} on {self.request}"
+    
+class BloodDonationEvent(models.Model):
+    hospital = models.ForeignKey(
+        Hospital,
+        on_delete=models.CASCADE,
+        related_name='events'
+    )
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
+    location = models.ForeignKey(
+        Location,
+        on_delete=models.CASCADE,
+        related_name='blood_donation_events'
+    )
+    start_datetime = models.DateTimeField()
+    end_datetime = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    participants = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='blood_donation_events',
+        blank=True
+    )
+
+    def __str__(self):
+        return f"{self.title} at {self.hospital.name} ({self.start_datetime} - {self.end_datetime})"
+

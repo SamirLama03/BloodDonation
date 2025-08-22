@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import BloodRequest, Hospital, BloodRequestComment
+from .models import BloodRequest, Hospital, BloodRequestComment,BloodDonationEvent
 from authentication.models import Location
 from django.contrib.auth import get_user_model
 
@@ -81,3 +81,26 @@ class LocationAutoCompleteSerializer(serializer.ModelSerializer):
             'district',
             'province'
         ]
+
+
+class BloodDonationEventSerializer(serializers.ModelSerializer):
+    participants_count = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = BloodDonationEvent
+        fields = [
+            'id', 
+            'hospital', 
+            'title', 
+            'description', 
+            'location', 
+            'start_datetime', 
+            'end_datetime', 
+            'participants', 
+            'participants_count'
+        ]
+        read_only_fields = ['participants_count']
+
+    def get_participants_count(self, obj):
+        return obj.participants.count()
+
