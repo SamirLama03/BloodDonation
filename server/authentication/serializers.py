@@ -35,6 +35,8 @@ class UserRegistrationSerailizer(serializers.ModelSerializer):
             'last_name',
             'username',
             'email',
+            'blood_type',
+            'location',
             'password',
             'password_confirmation'
         ]

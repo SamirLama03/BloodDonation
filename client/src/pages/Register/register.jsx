@@ -11,6 +11,8 @@ export default function Register() {
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+    const [bloodType, setBloodType] = useState('');
+    const [location, setLocation] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [error, setError] = useState({});
@@ -96,6 +98,24 @@ export default function Register() {
                     className="form-input"
                     change={(e) => setEmail(e.target.value)}
                     error={error.email}
+                />
+                <InputField
+                    type="text"
+                    name="bloodType"
+                    placeholder="Select Your Blood Type"
+                    value={bloodType}
+                    className="form-input"
+                    change={(e) => setBloodType(e.target.value)}
+                    error={error.blood_type}
+                />
+                <InputField
+                    type="text"
+                    name="location"
+                    placeholder="Select Your Location"
+                    value={location}
+                    className="form-input"
+                    change={(e) => setLocation(e.target.value)}
+                    error={error.location}
                 />
 
                 <InputField
