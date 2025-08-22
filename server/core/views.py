@@ -2,8 +2,8 @@ from rest_framework.viewsets import ModelViewSet
 from django.core.cache import cache
 from .serializers import LocationAutoCompleteSerializer
 from rest_framework import permissions
-from .models import BloodRequest,BloodRequestComment
-from .serializers import BloodRequestSerializer, BloodRequestCommentSerializer
+from .models import BloodRequest,BloodRequestComment, Hospital
+from .serializers import BloodRequestSerializer, BloodRequestCommentSerializer,HospitalSerializer
 from rest_framework.decorater import action
 from rest_framework.response import Response
 from authentication.models import Location
@@ -36,6 +36,10 @@ class BloodRequestViewSet(ModelViewSet):
         return Response(serializer.data)
     
 
+class HospitalViewSet(ModelViewSet):
+    queryset = Hospital.objects.all()
+    serializer_class = HospitalSerializer
+    permission_classes = [permissions.IsAdminUser]
 
 
 class LocationAutoCompleteViewSet(ModelViewSet):
