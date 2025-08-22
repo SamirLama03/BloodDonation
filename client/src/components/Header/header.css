@@ -1,0 +1,16 @@
+.nav-item {
+    padding: 15px 20px;
+    /* background-color: grey; */
+    border-radius: 10px;
+    transition: all;
+    transition-duration: 0.5s;
+}
+
+.nav-item:hover {
+    background-color: grey;
+    transform: scale(1.1);
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
